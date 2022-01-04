@@ -8,7 +8,7 @@ HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
 setuptools.setup(
-    name='temp_name',
+    name='preprocessing_helper',
     version='1.0.0',
     description="",
     long_description=README,
@@ -20,6 +20,6 @@ setuptools.setup(
     license='MIT',
     classifiers=[],
     package_dir={"": "src"},
-    python_requires="",
-    install_requires=[""]
+    python_requires="3.9",
+    install_requires=["psycopg2", "pandas"]
 )
