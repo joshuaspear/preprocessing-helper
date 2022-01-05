@@ -1,6 +1,7 @@
 name: Publish Python to PyPI
 
-push:
+on:
+  push:
     branches:
       - main
     tags: 
