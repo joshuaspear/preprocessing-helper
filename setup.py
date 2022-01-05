@@ -20,6 +20,6 @@ setuptools.setup(
     license='MIT',
     classifiers=[],
     package_dir={"": "src"},
-    python_requires="3.9",
-    install_requires=["psycopg2", "pandas"]
+    python_requires=">=3.9",
+    install_requires=[]
 )
