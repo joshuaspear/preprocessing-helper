@@ -22,7 +22,8 @@ class FileNameGenerator:
         self.__file_lookup = {
             table_nm:os.path.join(
                 file_loc, tmp_file_lookup[table_names[table_nm]])
-            for table_nm in table_names.keys()}
+            for table_nm in table_names.keys() 
+            if table_names[table_nm] in tmp_file_lookup.keys()}
     
     @property
     def file_lookup(self):
