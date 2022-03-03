@@ -20,6 +20,6 @@ setuptools.setup(
     license='MIT',
     classifiers=[],
     package_dir={"": "src"},
-    python_requires=">=3.9",
+    python_requires=">=3.8",
     install_requires=[]
 )
