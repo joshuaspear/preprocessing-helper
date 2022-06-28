@@ -1,6 +1,6 @@
 import logging
 import pandas as pd
-from typing import List
+from typing import Any, List
 import re
 # List all files in a database
 # List all files matching a certain pattern
@@ -56,3 +56,27 @@ def pd_safe_merge(input_df_1:pd.DataFrame, input_df_2:pd.DataFrame, *args,
     else:
         pass
     return out_df
+
+
+def flatten_lst(input_lst:List[Any], recursive:bool=True)->List[Any]:
+    """Function for flattening a list containing lists
+
+    Args:
+        input_lst (List[Any]): Input list to flatten
+        recursive (bool, optional): If true the function will recursively 
+        flatten lists within the input list else only the first layer of lists
+        will be flattened. Defaults to True.
+
+    Returns:
+        List[Any]: A flattened version of the input_lst
+    """
+    output_lst = []
+    for sub_lst in input_lst:
+        if isinstance(sub_lst, list):
+            if recursive:
+                sub_lst = flatten_lst(sub_lst)
+            output_lst = output_lst + sub_lst
+        else:
+            output_lst.append(sub_lst)
+    return output_lst
+
