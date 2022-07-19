@@ -79,6 +79,7 @@ class RawDataLoader:
                 ret = self.__type_conversions(ret, type_conversions)
         elif self.read_mode == "db":
             ret = self.__read_db_table(file_table_name)
+            ret = self.__type_conversions(ret, type_conversions)
         return ret
     
     def __type_conversions(self, pandas_df:pd.DataFrame, 
