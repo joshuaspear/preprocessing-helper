@@ -1,7 +1,7 @@
 import logging
 import numpy as np
 import pandas as pd
-from typing import Any, List
+from typing import Any, Callable, List
 import re
 # List all files in a database
 # List all files matching a certain pattern
@@ -81,7 +81,8 @@ def flatten_lst(input_lst:List[Any], recursive:bool=True)->List[Any]:
             output_lst.append(sub_lst)
     return output_lst
 
-def pd_agg_percentile(n:int):
+
+def pd_agg_percentile(n:int, nan:str="ignore")->Callable:
     """Function to generate percentile values in the pandas aggregate function
     us as follows:
         column.agg([np.sum, np.mean, np.std, np.median,
@@ -89,8 +90,19 @@ def pd_agg_percentile(n:int):
 
     Args:
         n (int): Integer between 0 and 100, defining the percentile of interest
+        nan (str, optional): Option to "ignore" nans or "include" nans. If 
+        "include" is selected and nans are present, the percentile_ will return 
+        nans. Defaults to "ignore".
+
+    Returns:
+        Callable: Chosen percentile function, with name based on the percentile 
+        of interest. This can then be evaluated in the pandas agg function
     """
+    fnk_lkp = {
+        "include":np.percentile,
+        "ignore":np.nanpercentile
+    }
     def percentile_(x):
-        return np.percentile(x, n)
+        return fnk_lkp[nan](x, n)
     percentile_.__name__ = 'percentile_%s' % n
     return percentile_
