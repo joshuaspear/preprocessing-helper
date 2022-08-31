@@ -1,4 +1,5 @@
 import logging
+import numpy as np
 import pandas as pd
 from typing import Any, List
 import re
@@ -80,3 +81,16 @@ def flatten_lst(input_lst:List[Any], recursive:bool=True)->List[Any]:
             output_lst.append(sub_lst)
     return output_lst
 
+def pd_agg_percentile(n:int):
+    """Function to generate percentile values in the pandas aggregate function
+    us as follows:
+        column.agg([np.sum, np.mean, np.std, np.median,
+                     np.var, np.min, np.max, percentile(50), percentile(95)])
+
+    Args:
+        n (int): Integer between 0 and 100, defining the percentile of interest
+    """
+    def percentile_(x):
+        return np.percentile(x, n)
+    percentile_.__name__ = 'percentile_%s' % n
+    return percentile_
