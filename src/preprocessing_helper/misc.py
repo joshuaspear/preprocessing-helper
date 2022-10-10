@@ -1,5 +1,7 @@
 import logging
+import matplotlib.pyplot as plt
 import numpy as np
+import os
 import pandas as pd
 from typing import Any, Callable, List
 import re
@@ -106,3 +108,39 @@ def pd_agg_percentile(n:int, nan:str="ignore")->Callable:
         return fnk_lkp[nan](x, n)
     percentile_.__name__ = 'percentile_%s' % n
     return percentile_
+
+
+def get_prop_hist(df_hist:pd.DataFrame, bins:int, grp_var:str, trgt_var:str, 
+                  sv_dir=None, sv_nm="", shw_plt=False) -> None:
+    """Generates histogram plot of values as proportions
+
+    Args:
+        df_hist (pd.DataFrame): Dataframe containing values to aggregate. Must 
+        contain at least grp_var and trgt_var columns
+        bins (int): Number of bins to use
+        grp_var (str): Variable to group over
+        trgt_var (str): Variable to aggregate
+        sv_dir (_type_, optional): Save directory for the file. 
+        Defaults to None.
+        sv_nm (str, optional): Additional information for title and file name. 
+        Defaults to "".
+        shw_plt (bool, optional): Option to display the plot. Defaults to False.
+    """
+    df_hist["bins"] = pd.cut(df_hist[trgt_var], bins=bins)
+    unq_cat_vals = df_hist["bins"].drop_duplicates().sort_values()
+    cat_map = {key:value for key, value 
+               in zip(unq_cat_vals, range(0, len(unq_cat_vals)))}
+    df_hist["bins"] = df_hist["bins"].map(cat_map)
+    df_hist_grp = df_hist.groupby(by=[grp_var, "bins"], as_index=False).size()
+    df_hist_grp["ttl_size"] = df_hist_grp.groupby(by=[grp_var]).transform("sum")
+    df_hist_grp["size"] = df_hist_grp["size"]/df_hist_grp["ttl_size"]
+    ttl = "Histogram of {}values split by {}".format(sv_nm, grp_var)
+    for i in df_hist_grp[grp_var].unique():
+        tmp_df = df_hist_grp[df_hist_grp[grp_var] == i]
+        plt.bar(tmp_df["bins"], tmp_df["size"], label=i, alpha=0.5)
+    plt.legend()
+    plt.title(ttl)
+    if sv_dir:
+        plt.savefig(os.path.join(sv_dir, ttl))
+    if shw_plt:
+        plt.show()
