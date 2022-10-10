@@ -9,7 +9,7 @@ README = (HERE / "README.md").read_text()
 
 setuptools.setup(
     name='preprocessing_helper',
-    version='1.2.3',
+    version='1.2.4',
     description="",
     long_description=README,
     packages=setuptools.find_packages(where="src"),
