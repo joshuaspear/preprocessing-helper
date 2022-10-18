@@ -144,3 +144,19 @@ def get_prop_hist(df_hist:pd.DataFrame, bins:int, grp_var:str, trgt_var:str,
         plt.savefig(os.path.join(sv_dir, ttl))
     if shw_plt:
         plt.show()
+
+def pd_col_opt_slct(df:pd.DataFrame, sub_str_lst:List[str])->List[str]:
+    """Function to select columns from a pandas dataframe based on whether they 
+    contain one of the substrings found in the list sub_str_lst
+
+    Args:
+        df (pd.DataFrame): Dataframe over which to select columns
+        sub_str_lst (List[str]): List of substrings to look for
+
+    Returns:
+        List[str]: List of column names containing one of the substrings found
+        in the list sub_str_lst
+    """
+    sub_str_regex = "|".join(sub_str_lst)
+    slct_cols = list(df.columns[df.columns.str.contains(sub_str_regex)])
+    return slct_cols
