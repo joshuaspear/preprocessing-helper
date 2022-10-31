@@ -132,7 +132,8 @@ def get_prop_hist(df_hist:pd.DataFrame, bins:int, grp_var:str, trgt_var:str,
                in zip(unq_cat_vals, range(0, len(unq_cat_vals)))}
     df_hist["bins"] = df_hist["bins"].map(cat_map)
     df_hist_grp = df_hist.groupby(by=[grp_var, "bins"], as_index=False).size()
-    df_hist_grp["ttl_size"] = df_hist_grp.groupby(by=[grp_var]).transform("sum")
+    df_hist_grp["ttl_size"] = df_hist_grp.groupby(
+        by=[grp_var])["size"].transform("sum")
     df_hist_grp["size"] = df_hist_grp["size"]/df_hist_grp["ttl_size"]
     ttl = "Histogram of {}values split by {}".format(sv_nm, grp_var)
     for i in df_hist_grp[grp_var].unique():
