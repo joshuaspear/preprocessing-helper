@@ -161,3 +161,34 @@ def pd_col_opt_slct(df:pd.DataFrame, sub_str_lst:List[str])->List[str]:
     sub_str_regex = "|".join(sub_str_lst)
     slct_cols = list(df.columns[df.columns.str.contains(sub_str_regex)])
     return slct_cols
+
+def pd_slct_sub_df(super_cols:pd.DataFrame, sub_cols:pd.DataFrame
+                   ) -> pd.Series:
+    """Function to provide indicies of "super_cols" which match the inidicies 
+    of "sub_cols". The output can then be used to subset super_cols over 
+    multiple columns
+
+    Args:
+        super_cols (pd.DataFrame): Dataframe to derive indicies from
+        sub_cols (pd.DataFrame): Dataframe to derive truth values based on 
+        inclusion
+
+    Raises:
+        Exception: pd.Series of dimension (len(super_cols),1) where True 
+        indications a non-position dependent match between super_cols and 
+        sub_cols
+
+    Returns:
+        pd.Series[bool]: Exception raised if columns between the two dataframes 
+        don't match
+    """
+    if set(super_cols.columns) != set(sub_cols):
+        raise Exception("Input dataframes must contain equal values")
+    # Order identically
+    sub_cols = sub_cols[super_cols.columns]
+    idx_subset = (
+        (super_cols.astype(str).apply(lambda x: "_".join(x), axis=1)).isin(
+            (sub_cols.astype(str).apply(lambda x: "_".join(x), axis=1))
+        )
+    )
+    return idx_subset
