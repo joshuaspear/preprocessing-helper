@@ -11,7 +11,7 @@ import re
 
 logger = logging.getLogger("preprocessing_helper")
 
-def flatten_mutli_index(input_df_cols:List)->List:
+def flatten_multi_index(input_df_cols:List)->List:
     """Flattens a hierachichal pandas index
 
     Args:
